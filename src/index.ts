@@ -1,5 +1,6 @@
 import express from 'express';
 import routes from './routes';
+import Handler from './utils/helpers/Handler';
 
 const app = express();
 
@@ -7,6 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(routes);
 
+app.use(Handler.errorResponse);
 
 
 let port = parseInt(process.env.PORT || "");
