@@ -3,8 +3,9 @@ import User, { userAttributes, userOptions } from './User';
 import Notification, { notificationAttributes, notificationOptions } from './Notification';
 import { DbInterface } from '../interface/models/db';
 
-export const createModels = (): DbInterface => {
-  const sequelize = new Sequelize('postgres://postgres:87654321@localhost:5432/assess');
+export const initializeDB = (): DbInterface => {
+  const dbUrl = process.env.DATABASE_URL || '';
+  const sequelize = new Sequelize(dbUrl);
 
   const db: DbInterface = {
     sequelize,
