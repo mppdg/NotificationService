@@ -1,7 +1,6 @@
 import bcrypt from 'bcrypt';
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, Sequelize } from 'sequelize';
 import { IUserAttributes, IUserCreationAttributes } from '../interface/models/user';
-
 
 class User extends Model<IUserAttributes, IUserCreationAttributes>
   implements IUserAttributes {
@@ -42,6 +41,16 @@ export const userAttributes = {
       allowNull: false,
     },
 };
+
+export const userOptions = (sequelize: Sequelize) => ({
+    tableName: "Users",
+    sequelize,
+    hooks: {
+      beforeCreate: (user: User) => {
+        user.hash = bcrypt.hashSync(user.hash, bcrypt.genSaltSync(10));
+      },
+    },
+})
 
 
 

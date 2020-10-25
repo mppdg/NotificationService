@@ -1,6 +1,10 @@
 import express from 'express';
 import routes from './routes';
+import { createModels } from './models';
 import Handler from './utils/middleware/Handler';
+
+const db = createModels();
+db.sequelize.sync()
 
 const app = express();
 

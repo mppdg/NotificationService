@@ -1,4 +1,4 @@
-import { Model, DataTypes } from "sequelize";
+import { Model, DataTypes, Sequelize } from "sequelize";
 import { INotificationAttributes, INotificationCreationAttributes } from '../interface/models/notification';
 
 
@@ -37,6 +37,11 @@ export const notificationAttributes = {
       allowNull: false
     }
   };
+
+export const notificationOptions = (sequelize: Sequelize) => ({
+  tableName: "Notifications",
+  sequelize,
+})
 
 // export const notificationOptions = {
 //     tableName: "notifications",
