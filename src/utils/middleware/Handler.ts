@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 const isProduction = process.env.NODE_ENV === 'production';
 
 /**
- * Defines error handlers.
+ * Defines error handlers middleware.
  * 
  */
 

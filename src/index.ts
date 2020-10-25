@@ -1,6 +1,6 @@
 import express from 'express';
 import routes from './routes';
-import Handler from './utils/helpers/Handler';
+import Handler from './utils/middleware/Handler';
 
 const app = express();
 
