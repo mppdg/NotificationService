@@ -43,41 +43,6 @@ export const notificationOptions = (sequelize: Sequelize) => ({
   sequelize,
 })
 
-// export const notificationOptions = {
-//     tableName: "notifications",
-//     sequelize
-// }
-
-// Notification.init(
-//   {
-//     id: {
-//       allowNull: false,
-//       primaryKey: true,
-//       type: DataTypes.UUID,
-//       defaultValue: DataTypes.UUIDV4,
-//     },
-//     message: {
-//       type: DataTypes.TEXT,
-//       allowNull: false,
-//     },
-//     topic: {
-//       type: DataTypes.STRING,
-//       allowNull: false,
-//     },
-//     topicArn: {
-//       type: DataTypes.STRING,
-//       allowNull: false,
-//     },
-//     sender_id: {
-//       type: DataTypes.UUID,
-//       allowNull: false
-//     }
-//   },
-//   {
-//     tableName: "notifications",
-//     sequelize
-//   }
-// );
 
 export default Notification;
 

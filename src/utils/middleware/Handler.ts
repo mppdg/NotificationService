@@ -28,6 +28,16 @@ class Handler {
     const error = { message: err.message, stacktrace: !isProduction && err };
     return res.json({ error });
   }
+
+  public static throw(
+    res: Response,
+    message: string,
+    status: number
+    ): any {
+
+    res.status(status);
+    throw new Error(message);
+  }
 }
 
 export default Handler;

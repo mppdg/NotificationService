@@ -1,13 +1,11 @@
 import express from 'express';
-import dotenv from 'dotenv';
 import routes from './routes';
-import { initializeDB } from './models';
+import db from './models';
 import Handler from './utils/middleware/Handler';
 
-dotenv.config();
 
-const db = initializeDB();
-db.sequelize.sync()
+
+db.sequelize.sync();
 
 const app = express();
 
