@@ -17,7 +17,7 @@ const API_VERSION = '2010-03-31';
 
 class NotificationController {
 
-  public static async getAll(
+  public static async getNotifications(
     req: IRequest,
     res: IResponse,
     next: INextFunction
@@ -35,11 +35,26 @@ class NotificationController {
       where: { topicArn: subs.map(sub => sub.topicArn) },
       include: [Notification.associations.sender]
     }).then(notifications => {
-      return res.status(STATUS_CODE.OK).json({
-        success: true,
-        notifications
-      })
+      return res.status(STATUS_CODE.OK)
+        .json(Api.successResponse("Success", notifications));
     }).catch(next)
+  }
+
+  public static async getSubscriptions(
+    req: IRequest,
+    res: IResponse,
+    next: INextFunction
+  ): Promise<any> {
+
+    const { user = { id: '' } } = req;
+
+    const subs = await Subscription.findAll({
+      where: { subscriberId: user.id },
+    })
+
+    return res.status(STATUS_CODE.OK)
+      .json(Api.successResponse("Success", subs));
+
   }
 
 
