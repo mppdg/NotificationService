@@ -48,7 +48,32 @@ class AuthController {
     next: NextFunction
     ): any {
 
-    res.end('login into your account');
+    const { password, email } = req.body;
+
+    User.findOne({ where: { email } })
+      .then(user => {
+        if (!user) return Handler
+          .throw(res, 'Email or password not correct', STATUS_CODE.BAD_REQUEST);
+        const isMatch = user.comparePassword(password);
+
+        if (!isMatch) return Handler
+            .throw(res, 'Email or password not correct', STATUS_CODE.BAD_REQUEST);
+
+        const payload = { id: user.id, email: user.email }
+        const token = Auth.generateToken(payload, TOKEN_EXPIRES_IN);
+
+        const data = {
+          ...payload,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          token
+        };
+
+        return res
+          .status(STATUS_CODE.OK)
+          .json(Api.successResponse('Login successful', data));
+      })
+      .catch(next);
   }
 }
 
