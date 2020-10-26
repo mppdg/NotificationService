@@ -1,6 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
-const AWS = require('aws-sdk');
+import AWS from 'aws-sdk';
+import { IRequest, IResponse, INextFunction } from '../interface/api';
 import Notification from '../models/Notification';
+import Subscription from '../models/Subscription';
 import Handler from '../utils/middleware/Handler';
 import { STATUS_CODE } from '../utils/constants';
 import Api from '../utils/helpers/Api';
@@ -16,63 +17,73 @@ const API_VERSION = '2010-03-31';
 class NotificationController {
 
   public static getAll(
-    req: Request,
-    res: Response,
-    next: NextFunction
+    req: IRequest,
+    res: IResponse,
+    next: INextFunction
   ): any {
 
     res.end('get all notificaton')
   }
 
-  public static subscribe(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): any {
+  public static async subscribe(
+    req: IRequest,
+    res: IResponse,
+    next: INextFunction
+  ): Promise<any> {
 
-    const { topicName, email } = req.body;
+    const { topicName } = req.body;
+    const { user = { id: '', email: '' } } = req;
     const topic = topicName.toUpperCase();
-    // console.log('SNS_ARN###############', SNS_ARN)
+    const topicArn = `${SNS_ARN}:${topic}`;
+
     const params = {
       Protocol: 'EMAIL',
-      TopicArn: `${SNS_ARN}:${topic}`,
-      Endpoint: email
+      TopicArn: topicArn,
+      Endpoint: user.email,
     };
+    try {
+      const [subscription, created] = await Subscription
+        .findOrCreate({
+          where: { topicArn, subscriber_id: user.id },
+          defaults: { topic, topicArn, subscriber_id: user.id },
+        });
+      if (!created) return Handler
+        .throw(res, `You're already subscribed to '${topic}'`, STATUS_CODE.CONFLICT);
 
-    const subscribePromise = new AWS.SNS({ apiVersion: API_VERSION })
-      .subscribe(params)
-      .promise();
+      const data = await new AWS.SNS({ apiVersion: API_VERSION }).subscribe(params).promise();
+      return res
+        .status(201)
+        .json(Api.successResponse(
+          "Check your email for 'AWS Notification' to confirm subscription. You may check 'SPAM' or 'JUNK' folder if not in inbox",
+          { subscription: data.SubscriptionArn }
+        ))
 
-    // subscriptionStatus: "pending confirmation"
-    subscribePromise.then((data: any) => {
-      res.status(201).json(Api.successResponse(
-        "Check your email for 'AWS Notification' to confirm subscription. You may check 'SPAM' or 'JUNK' folder if not in inbox",
-        { subscription: data.SubscriptionArn }
-      ))
-    }).catch(next);
+    } catch (error) {
+      next(error);
+    }
   }
 
   static unsubscribe(
-    req: Request,
-    res: Response,
-    next: NextFunction
+    req: IRequest,
+    res: IResponse,
+    next: INextFunction
   ): any {
 
     res.end('unsubscribe from a notificaton')
   }
 
   static publish(
-    req: Request,
-    res: Response,
-    next: NextFunction
+    req: IRequest,
+    res: IResponse,
+    next: INextFunction
   ): any {
     res.end('publish a message')
   }
 
   static createTopic(
-    req: Request,
-    res: Response,
-    next: NextFunction
+    req: IRequest,
+    res: IResponse,
+    next: INextFunction
   ): any {
 
     const { topicName } = req.body;
@@ -94,9 +105,9 @@ class NotificationController {
   }
 
   static listTopics(
-    req: Request,
-    res: Response,
-    next: NextFunction
+    req: IRequest,
+    res: IResponse,
+    next: INextFunction
   ): any {
 
     const listTopicsPromise = new AWS
