@@ -5,7 +5,7 @@
  */
 
 class Api {
-  public static successResponse(message: string, data: any) {
+  public static successResponse(message: string | undefined, data: any) {
     return {
       success: true,
       message,
