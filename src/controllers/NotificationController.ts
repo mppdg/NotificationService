@@ -19,7 +19,7 @@ class NotificationController {
     req: Request,
     res: Response,
     next: NextFunction
-    ): any {
+  ): any {
 
     res.end('get all notificaton')
   }
@@ -28,16 +28,35 @@ class NotificationController {
     req: Request,
     res: Response,
     next: NextFunction
-    ): any {
+  ): any {
 
-    res.end('subscribe to a notificaton')
+    const { topicName, email } = req.body;
+    const topic = topicName.toUpperCase();
+    // console.log('SNS_ARN###############', SNS_ARN)
+    const params = {
+      Protocol: 'EMAIL',
+      TopicArn: `${SNS_ARN}:${topic}`,
+      Endpoint: email
+    };
+
+    const subscribePromise = new AWS.SNS({ apiVersion: API_VERSION })
+      .subscribe(params)
+      .promise();
+
+    // subscriptionStatus: "pending confirmation"
+    subscribePromise.then((data: any) => {
+      res.status(201).json(Api.successResponse(
+        "Check your email for 'AWS Notification' to confirm subscription. You may check 'SPAM' or 'JUNK' folder if not in inbox",
+        { subscription: data.SubscriptionArn }
+      ))
+    }).catch(next);
   }
 
   static unsubscribe(
     req: Request,
     res: Response,
     next: NextFunction
-    ): any {
+  ): any {
 
     res.end('unsubscribe from a notificaton')
   }
@@ -46,15 +65,15 @@ class NotificationController {
     req: Request,
     res: Response,
     next: NextFunction
-    ): any {
-      res.end('publish a message')
+  ): any {
+    res.end('publish a message')
   }
 
   static createTopic(
     req: Request,
     res: Response,
     next: NextFunction
-    ): any {
+  ): any {
 
     const { topicName } = req.body;
     const topic = topicName.toUpperCase();
@@ -68,7 +87,7 @@ class NotificationController {
       .then((data: any) => {
         return res
           .status(STATUS_CODE.CREATED)
-          .json(Api.successResponse(undefined, {topicArn: data.TopicArn}))
+          .json(Api.successResponse(undefined, { topicArn: data.TopicArn }))
 
       })
       .catch(next);
@@ -78,11 +97,11 @@ class NotificationController {
     req: Request,
     res: Response,
     next: NextFunction
-    ): any {
+  ): any {
 
     const listTopicsPromise = new AWS
       .SNS({ apiVersion: API_VERSION })
-      .listTopics({ })
+      .listTopics({})
       .promise();
 
     listTopicsPromise
@@ -92,7 +111,7 @@ class NotificationController {
           .throw(res, 'An error occured', STATUS_CODE.NOT_FOUND);
 
         const topics = data.Topics.map((item: any) => ({
-          topicArn: item.TopicArn, 
+          topicArn: item.TopicArn,
           topicName: item.TopicArn.split(':').slice(-1)[0]
         }))
         return res
