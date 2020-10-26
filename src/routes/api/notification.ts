@@ -8,7 +8,9 @@ import Auth from '../../utils/middleware/Auth';
 
 const router = Router();
 
-router.get('/', Auth.authenticate, NotificationController.getAll);
+router.get('/', Auth.authenticate, NotificationController.getNotifications);
+
+router.get('/subscriptions', Auth.authenticate, NotificationController.getSubscriptions);
 
 router.post('/subscribe', Auth.authenticate, NotificationController.subscribe);
 
