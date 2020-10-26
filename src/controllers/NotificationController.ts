@@ -52,7 +52,7 @@ class NotificationController {
 
       const data = await new AWS.SNS({ apiVersion: API_VERSION }).subscribe(params).promise();
       return res
-        .status(201)
+        .status(STATUS_CODE.CREATED)
         .json(Api.successResponse(
           "Check your email for 'AWS Notification' to confirm subscription. You may check 'SPAM' or 'JUNK' folder if not in inbox",
           { subscription: data.SubscriptionArn }
@@ -63,13 +63,43 @@ class NotificationController {
     }
   }
 
-  static unsubscribe(
+  static async unsubscribe(
     req: IRequest,
     res: IResponse,
     next: INextFunction
-  ): any {
+  ): Promise<any> {
 
-    res.end('unsubscribe from a notificaton')
+    const { topicName } = req.body;
+    const { user = { id: '', email: '' } } = req;
+    const topic = topicName.toUpperCase();
+    const topicArn = `${SNS_ARN}:${topic}`;
+
+    try {
+      const data = await new AWS.SNS({ apiVersion: API_VERSION })
+        .listSubscriptionsByTopic({ TopicArn: topicArn }).promise();
+      const subscription = data.Subscriptions?.find(sub => sub.Endpoint === user.email);
+      if (!subscription) return Handler.throw(
+        res,
+        `It seems you are not subscribed to '${topic}'. Unsubscription not neccessary`,
+        STATUS_CODE.NOT_FOUND
+      )
+
+      if (subscription.SubscriptionArn === 'PendingConfirmation') return Handler.throw(
+        res,
+        `Your subcription to '${topic}' is pending confirmation. Unsubscription not neccessary`,
+        STATUS_CODE.NOT_FOUND
+      )
+
+      Subscription.destroy({ where: { topicArn, subscriber_id: user.id } }).catch();
+      await new AWS.SNS({ apiVersion: API_VERSION })
+        .unsubscribe({ SubscriptionArn: subscription.SubscriptionArn || '' }).promise();
+
+      return res
+        .status(STATUS_CODE.OK)
+        .json(Api.successResponse(`You have unsubscribed from '${topic}'`, {}));
+    } catch (error) {
+      next(error)
+    }
   }
 
   static publish(
