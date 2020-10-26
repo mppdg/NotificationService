@@ -164,9 +164,14 @@ class NotificationController {
         .promise();
 
       // Save message
-      const { id: senderId } = user;
-      const record = await Notification.create({ message, topic, topicArn, senderId });
+      const { id } = user;
+      const record = await Notification.create({ message, topic, topicArn, senderId: id });
       if (!record) Handler.throw(res, 'Message could not saved', STATUS_CODE.SERVER_ERROR);
+
+      // Send real time notification to all subscriber
+      if (req.io) {
+        req.io.emit(`receive-message:${topic}`, JSON.stringify(record));
+      }
 
       // Send response
       return res.status(STATUS_CODE.OK).json({
