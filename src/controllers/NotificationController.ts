@@ -2,7 +2,6 @@ import AWS from 'aws-sdk';
 import { IRequest, IResponse, INextFunction } from '../interface/api';
 import Notification from '../models/Notification';
 import Subscription from '../models/Subscription';
-import User from '../models/User';
 import Handler from '../utils/middleware/Handler';
 import { STATUS_CODE } from '../utils/constants';
 import Api from '../utils/helpers/Api';
