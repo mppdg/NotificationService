@@ -24,7 +24,7 @@ class Handler {
     res: Response,
     next: NextFunction
   ): any {
-
+    if (res.statusCode < STATUS_CODE.BAD_REQUEST) res.status(STATUS_CODE.SERVER_ERROR);
     return res.json({ success: false, error: { message: err.message } });
   }
 

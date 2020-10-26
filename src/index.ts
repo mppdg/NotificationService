@@ -1,9 +1,11 @@
 import express from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
 import routes from './routes';
 import db from './models';
 import Handler from './utils/middleware/Handler';
 
-
+dotenv.config();
 
 db.sequelize.sync();
 
