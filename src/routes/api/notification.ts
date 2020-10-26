@@ -17,6 +17,8 @@ router.delete('/unsubscribe', authenticate, NotificationController.unsubscribe);
 
 router.post('/publish', authenticate, NotificationController.publish);
 
-router.post('/topic', authenticate, NotificationController.createTopic);
+router.post('/topics', authenticate, NotificationController.createTopic);
+
+router.get('/topics', authenticate, NotificationController.listTopics);
 
 export default router;
