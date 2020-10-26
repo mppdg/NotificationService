@@ -2,7 +2,6 @@ import AWS from 'aws-sdk';
 import { IRequest, IResponse, INextFunction } from '../interface/api';
 import Notification from '../models/Notification';
 import Subscription from '../models/Subscription';
-import User from '../models/User';
 import Handler from '../utils/middleware/Handler';
 import { STATUS_CODE } from '../utils/constants';
 import Api from '../utils/helpers/Api';
@@ -165,9 +164,14 @@ class NotificationController {
         .promise();
 
       // Save message
-      const { id: senderId } = user;
-      const record = await Notification.create({ message, topic, topicArn, senderId });
+      const { id } = user;
+      const record = await Notification.create({ message, topic, topicArn, senderId: id });
       if (!record) Handler.throw(res, 'Message could not saved', STATUS_CODE.SERVER_ERROR);
+
+      // Send real time notification to all subscriber
+      if (req.io) {
+        req.io.emit(`receive-message:${topic}`, JSON.stringify(record));
+      }
 
       // Send response
       return res.status(STATUS_CODE.OK).json({
