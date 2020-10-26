@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
+import User from '../models/User';
 import Handler from '../utils/middleware/Handler';
 import Auth from '../utils/helpers/Auth';
 import { TOKEN_EXPIRES_IN, STATUS_CODE } from '../utils/constants';
-import User from '../models/User';
 import Api from '../utils/helpers/Api';
 
 /**

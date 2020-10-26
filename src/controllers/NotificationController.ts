@@ -1,4 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
+const AWS = require('aws-sdk');
+import Notification from '../models/Notification';
+import Handler from '../utils/middleware/Handler';
+import Auth from '../utils/helpers/Auth';
+import { TOKEN_EXPIRES_IN, STATUS_CODE } from '../utils/constants';
+import Api from '../utils/helpers/Api';
+
+const SNS_ARN = process.env.AWS_SNS_ARN;
+const API_VERSION = '2010-03-31';
 
 /**
  * Defines controllers for handling notification routes
@@ -48,7 +57,22 @@ class NotificationController {
     next: NextFunction
     ): any {
 
-      res.end('create notification preference or topic')
+    const { topicName } = req.body;
+    const topic = topicName.toUpperCase();
+
+    const createTopicPromise = new AWS
+      .SNS({ apiVersion: API_VERSION })
+      .createTopic({ Name: topic })
+      .promise();
+
+    createTopicPromise
+      .then((data: any) => {
+        return res
+          .status(STATUS_CODE.CREATED)
+          .json(Api.successResponse(undefined, {topicArn: data.TopicArn}))
+
+      })
+      .catch(next);
   }
 
 }
