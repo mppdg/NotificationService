@@ -5,10 +5,19 @@ export default {
     "title": "Notification Services",
     "contact": {}
   },
-  "host": "https://mppdg-notification-service.herokuapp.com",
+  "host": "mppdg-notification-service.herokuapp.com",
   "basePath": "/api",
-  "securityDefinitions": {},
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "default": "Bearer {token}",
+    },
+
+  },
   "schemes": [
+    "https",
     "http"
   ],
   "consumes": [
