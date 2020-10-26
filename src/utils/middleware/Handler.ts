@@ -1,4 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
+import { STATUS_CODE } from '../constants';
+
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -15,7 +17,7 @@ class Handler {
     next: NextFunction
     ): any {
 
-    res.status(404);
+    res.status(STATUS_CODE.NOT_FOUND);
     next(new Error(`Path '${req.originalUrl}' not found`));
   }
   
