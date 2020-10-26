@@ -25,6 +25,7 @@ class NotificationController {
     res.end('get all notificaton')
   }
 
+
   public static async subscribe(
     req: IRequest,
     res: IResponse,
@@ -62,6 +63,7 @@ class NotificationController {
       next(error);
     }
   }
+
 
   static async unsubscribe(
     req: IRequest,
@@ -102,12 +104,52 @@ class NotificationController {
     }
   }
 
-  static publish(
+
+  static async publish(
     req: IRequest,
     res: IResponse,
     next: INextFunction
-  ): any {
-    res.end('publish a message')
+  ): Promise<any> {
+    const { user = { id: '', email: '', firstName: '', lastName: '' } } = req;
+    const { topicName, message } = req.body;
+    const topic = topicName.toUpperCase();
+
+    const topicArn = `${SNS_ARN}:${topic}`;
+
+    const params = {
+      Message: message,
+      TopicArn: topicArn
+    };
+
+    try {
+      // Check if topic exist
+      await new AWS.SNS({ apiVersion: API_VERSION })
+        .getTopicAttributes({ TopicArn: topicArn })
+        .promise();
+
+      // Publish message
+      const result = await new AWS.SNS({ apiVersion: API_VERSION })
+        .publish(params)
+        .promise();
+
+      // Save message
+      const { id: sender_id } = user;
+      const record = await Notification.create({ message, topic, topicArn, sender_id });
+      if (!record) Handler.throw(res, 'Message could not saved', STATUS_CODE.SERVER_ERROR);
+
+      // Send response
+      return res.status(STATUS_CODE.OK).json({
+        success: true,
+        message: `Message sent to '${topic}' subscribers`,
+      })
+
+    } catch (error) {
+      if (error.message === 'Topic does not exist') {
+        res.status(404);
+      }
+      next(error);
+    }
+
   }
 
   static createTopic(
