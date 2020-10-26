@@ -17,4 +17,13 @@ const db: DbInterface = {
   Subscription: Subscription.init(subscriptionAttributes, subscriptionOptions(sequelize)),
 };
 
+/* Associations */
+User.hasMany(Notification, {
+  sourceKey: "id",
+  foreignKey: "senderId",
+  as: "notifications",
+});
+
+Notification.belongsTo(User, { as: "sender" });
+
 export default db;

@@ -4,7 +4,7 @@ export interface ISubscriptionAttributes {
   id: string;
   topic: string,
   topicArn: string,
-  subscriber_id: string,
+  subscriberId: string,
 }
 export interface ISubscriptionCreationAttributes
   extends Optional<ISubscriptionAttributes, "id"> { }

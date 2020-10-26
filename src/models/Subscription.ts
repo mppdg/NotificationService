@@ -7,7 +7,7 @@ class Subscription extends Model<ISubscriptionAttributes, ISubscriptionCreationA
   public id!: string;
   public topic!: string;
   public topicArn!: string;
-  public subscriber_id!: string;
+  public subscriberId!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -27,7 +27,7 @@ export const subscriptionAttributes = {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  subscriber_id: {
+  subscriberId: {
     type: DataTypes.UUID,
     allowNull: false
   }

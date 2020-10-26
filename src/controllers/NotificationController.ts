@@ -2,6 +2,7 @@ import AWS from 'aws-sdk';
 import { IRequest, IResponse, INextFunction } from '../interface/api';
 import Notification from '../models/Notification';
 import Subscription from '../models/Subscription';
+import User from '../models/User';
 import Handler from '../utils/middleware/Handler';
 import { STATUS_CODE } from '../utils/constants';
 import Api from '../utils/helpers/Api';
@@ -16,13 +17,29 @@ const API_VERSION = '2010-03-31';
 
 class NotificationController {
 
-  public static getAll(
+  public static async getAll(
     req: IRequest,
     res: IResponse,
     next: INextFunction
-  ): any {
+  ): Promise<any> {
 
-    res.end('get all notificaton')
+    const { user = { id: '' } } = req;
+
+    const subs = await Subscription.findAll({
+      where: { subscriberId: user.id },
+      attributes: ['topicArn'],
+    })
+
+
+    Notification.findAll({
+      where: { topicArn: subs.map(sub => sub.topicArn) },
+      include: [Notification.associations.sender]
+    }).then(notifications => {
+      return res.status(STATUS_CODE.OK).json({
+        success: true,
+        notifications
+      })
+    }).catch(next)
   }
 
 
@@ -45,8 +62,8 @@ class NotificationController {
     try {
       const [subscription, created] = await Subscription
         .findOrCreate({
-          where: { topicArn, subscriber_id: user.id },
-          defaults: { topic, topicArn, subscriber_id: user.id },
+          where: { topicArn, subscriberId: user.id },
+          defaults: { topic, topicArn, subscriberId: user.id },
         });
       if (!created) return Handler
         .throw(res, `You're already subscribed to '${topic}'`, STATUS_CODE.CONFLICT);
@@ -92,7 +109,7 @@ class NotificationController {
         STATUS_CODE.NOT_FOUND
       )
 
-      Subscription.destroy({ where: { topicArn, subscriber_id: user.id } }).catch();
+      Subscription.destroy({ where: { topicArn, subscriberId: user.id } }).catch();
       await new AWS.SNS({ apiVersion: API_VERSION })
         .unsubscribe({ SubscriptionArn: subscription.SubscriptionArn || '' }).promise();
 
@@ -133,8 +150,8 @@ class NotificationController {
         .promise();
 
       // Save message
-      const { id: sender_id } = user;
-      const record = await Notification.create({ message, topic, topicArn, sender_id });
+      const { id: senderId } = user;
+      const record = await Notification.create({ message, topic, topicArn, senderId });
       if (!record) Handler.throw(res, 'Message could not saved', STATUS_CODE.SERVER_ERROR);
 
       // Send response

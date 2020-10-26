@@ -5,7 +5,7 @@ export interface INotificationAttributes {
   message: string;
   topic: string,
   topicArn: string,
-  sender_id: string,
+  senderId: string,
 }
-export interface INotificationCreationAttributes 
-  extends Optional<INotificationAttributes, "id"> {}
+export interface INotificationCreationAttributes
+  extends Optional<INotificationAttributes, "id"> { }
