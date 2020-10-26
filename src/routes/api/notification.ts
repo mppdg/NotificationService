@@ -4,21 +4,20 @@
  */
 import { Router } from 'express';
 import NotificationController from '../../controllers/NotificationController';
-
-const authenticate = (req: any, res: any, next: any) => next()
+import Auth from '../../utils/middleware/Auth';
 
 const router = Router();
 
-router.get('/', authenticate, NotificationController.getAll);
+router.get('/', Auth.authenticate, NotificationController.getAll);
 
-router.post('/subscribe', authenticate, NotificationController.subscribe);
+router.post('/subscribe', Auth.authenticate, NotificationController.subscribe);
 
-router.delete('/unsubscribe', authenticate, NotificationController.unsubscribe);
+router.delete('/unsubscribe', Auth.authenticate, NotificationController.unsubscribe);
 
-router.post('/publish', authenticate, NotificationController.publish);
+router.post('/publish', Auth.authenticate, NotificationController.publish);
 
-router.post('/topics', authenticate, NotificationController.createTopic);
+router.post('/topics', Auth.authenticate, NotificationController.createTopic);
 
-router.get('/topics', authenticate, NotificationController.listTopics);
+router.get('/topics', Auth.authenticate, NotificationController.listTopics);
 
 export default router;
