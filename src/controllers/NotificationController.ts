@@ -87,6 +87,10 @@ class NotificationController {
 
     listTopicsPromise
       .then((data: any) => {
+
+        if (!data) return Handler
+          .throw(res, 'An error occured', STATUS_CODE.NOT_FOUND);
+
         const topics = data.Topics.map((item: any) => ({
           topicArn: item.TopicArn, 
           topicName: item.TopicArn.split(':').slice(-1)[0]
