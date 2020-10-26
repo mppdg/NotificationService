@@ -32,7 +32,7 @@ class Auth {
     User.findOne({ where: { email } })
       .then(user => {
         if (!user) return Handler
-          .throw(res, 'Email or password not correct', STATUS_CODE.BAD_REQUEST);
+          .throw(res, 'Authentication failed', STATUS_CODE.UNAUTHORIZED);
         req.user = user;
         next();
       })
