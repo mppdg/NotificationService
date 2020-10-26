@@ -17,42 +17,45 @@ class User extends Model<IUserAttributes, IUserCreationAttributes>
 }
 
 export const userAttributes = {
-    id: {
-      allowNull: false,
-      primaryKey: true,
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
+  id: {
+    allowNull: false,
+    primaryKey: true,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+  },
+  firstName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  lastName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+    validate: {
+      isEmail: true,
     },
-    firstName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: true,
-      },
-    },
-    hash: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
+  },
+  hash: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
 };
 
 export const userOptions = (sequelize: Sequelize) => ({
-    tableName: "Users",
-    sequelize,
-    hooks: {
-      beforeCreate: (user: User) => {
-        user.hash = bcrypt.hashSync(user.hash, bcrypt.genSaltSync(10));
-      },
+  tableName: "Users",
+  sequelize,
+  hooks: {
+    beforeCreate: (user: User) => {
+      user.hash = bcrypt.hashSync(user.hash, bcrypt.genSaltSync(10));
     },
+  },
+  defaultScope: {
+    attributes: { exclude: ['hash'] },
+  }
 })
 
 
