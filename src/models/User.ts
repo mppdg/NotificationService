@@ -11,6 +11,9 @@ class User extends Model<IUserAttributes, IUserCreationAttributes>
   public hash!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  comparePassword(plainPassword: string): boolean {
+    return bcrypt.compareSync(plainPassword, this.hash);
+  }
 }
 
 export const userAttributes = {
