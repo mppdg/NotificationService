@@ -53,9 +53,9 @@ export const userOptions = (sequelize: Sequelize) => ({
       user.hash = bcrypt.hashSync(user.hash, bcrypt.genSaltSync(10));
     },
   },
-  defaultScope: {
-    attributes: { exclude: ['hash'] },
-  }
+  // defaultScope: {
+  //   attributes: { exclude: ['hash'] },
+  // }
 })
 
 
