@@ -21,6 +21,12 @@ It leverages AWS SNS pub/sub mechanism to send email notifications and Socket.IO
 - `POST /api/notifications/subscribe` Subscribe to a topic
 - `DELETE /api/notifications/unsubscribe` Unsubscribe from a topic
 
+#### Sock.io
+
+- `/api/notifications/io` Socket connection hub
+- `receive-message:{topic}` Receives message from `topic` subscribers
+- `send-message:{topic}` Send message to a `topic` subscribers
+
 ## Languages/Technologies
 
 - Javascript
