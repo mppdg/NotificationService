@@ -12,7 +12,7 @@ class SocketIO {
     const io = ioServer(server);
 
     const connection = io
-      .of("notifications/io")
+      .of("io/socket/notifications")
       .on("connection", (socket: Socket) => { });
 
     return (

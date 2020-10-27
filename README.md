@@ -11,7 +11,7 @@ It leverages AWS SNS pub/sub mechanism to send email notifications and Socket.IO
 
 ## Enpoints summary
 
-Scroll to the bottom of this page for more details
+See usage reference at the bottom of this page
 
 - `POST /api/auth/signup` Register a user account
 - `POST /api/auth/signin` Login a user account
@@ -25,7 +25,7 @@ Scroll to the bottom of this page for more details
 
 #### Sock.io
 
-- `/api/notifications/io` Socket connection hub
+- `/io/socket/notifications` Socket connection hub
 - `receive-message:{topic}` Receives message from `topic` subscribers
 - `send-message:{topic}` Send message to a `topic` subscribers
 
