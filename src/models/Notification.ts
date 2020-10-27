@@ -1,3 +1,4 @@
+import { Method } from "aws-sdk/clients/cloudfront";
 import { Model, DataTypes, Sequelize } from "sequelize";
 import { INotificationAttributes, INotificationCreationAttributes } from '../interface/models/notification';
 
