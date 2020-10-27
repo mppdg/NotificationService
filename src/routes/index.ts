@@ -13,6 +13,7 @@ import swaggerDocument from '../utils/swagger.docs';
 const router = Router();
 
 router.use('/api', apiRouter);
+router.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 router.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 router.use('/*', Handler.pathNotFound);
 
