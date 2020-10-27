@@ -11,7 +11,7 @@ It leverages AWS SNS pub/sub mechanism to send email notifications and Socket.IO
 
 ## Enpoints summary
 
-See API reference at this page bottom
+See below for [API reference](https://github.com/mppdg/NotificationService/tree/add-api-endpoints-details#api-reference)
 
 - `POST /api/auth/signup` Register a user account
 - `POST /api/auth/signin` Login a user account
