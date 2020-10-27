@@ -11,7 +11,7 @@ It leverages AWS SNS pub/sub mechanism to send email notifications and Socket.IO
 
 ## Enpoints summary
 
-See usage reference at the bottom of this page
+See API reference at this page bottom
 
 - `POST /api/auth/signup` Register a user account
 - `POST /api/auth/signin` Login a user account
@@ -129,7 +129,8 @@ Follow the steps below to setup a local development environment, make sure to ha
 
 ```source-json
 {
-  "topicName": "Newsletter"
+  "email": "youremail@domain.com",
+  "password": "yourpassword"
 }
 ```
 
