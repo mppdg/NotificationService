@@ -1,20 +1,18 @@
 import express from 'express';
 import { Server } from 'http';
-import dotenv from 'dotenv';
-dotenv.config();
+import { config } from 'dotenv'; config()
+import cors from 'cors';
 import routes from './routes';
 import db from './models';
 import Handler from './utils/middleware/Handler';
 import SocketIO from './utils/middleware/SocketIO';
-
-
-dotenv.config();
 
 db.sequelize.sync();
 
 const app = express();
 const server = new Server(app);
 
+app.use(cors());
 app.use(SocketIO.setup(server));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

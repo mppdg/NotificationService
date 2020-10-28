@@ -1,11 +1,11 @@
-# Notification Service
+# [Notification Service](https://mppdg-notification-service.herokuapp.com/)
 
 Server that sends out user notifications based on getting a message. It exposes endpoints for managing notification preferences.
 It leverages AWS SNS pub/sub mechanism to send email notifications and Socket.IO to deliver real time in-app notifications.
 
 ## API DOCS
 
-<!-- [Swagger UI](https://tshirtshop-api.herokuapp.com/) -->
+[Swagger UI](https://mppdg-notification-service.herokuapp.com/api-docs)
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://www.getpostman.com/collections/07993574ca6f8b26069e)
 

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "node ./build/index.js",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' --files src/index.ts",
     "build": "rm -rf build && tsc -p .",
     "lint": "./node_modules/.bin/tslint -c tslint.json 'src/**/**.ts'"
