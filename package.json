@@ -7,7 +7,6 @@
     "start": "node ./build/index.js",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' --files src/index.ts",
     "build": "rm -rf build && tsc -p .",
-    "build:2": "tsc --project './tsconfig.json'",
     "lint": "./node_modules/.bin/tslint -c tslint.json 'src/**/**.ts'"
   },
   "author": "",
