@@ -27,13 +27,14 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "declaration": true,
-    "sourceMap": false
+    "sourceMap": false,
+    "types": []
   },
   "exclude": [
     "./node_modules/**/*",
     "./build/**/*"
   ],
   "include": [
-    "./src/**/*"
+    "src/**/*.ts"
   ]
 }
