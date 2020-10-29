@@ -32,7 +32,7 @@ class NotificationController {
 
     Notification.findAll({
       where: { topicArn: subs.map(sub => sub.topicArn) },
-      include: [Notification.associations.sender]
+      include: [Notification.associations.sender],
     }).then(notifications => {
       return res.status(STATUS_CODE.OK)
         .json(Api.successResponse("Success", notifications));
