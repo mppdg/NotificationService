@@ -1,11 +1,11 @@
-# Notification Service
+# [Notification Service](https://mppdg-notification-service.herokuapp.com)
 
-Server that sends out user notifications based on getting a message. It exposes endpoints for managing notification preferences.
+Server sends out user notifications based on getting a message. It exposes endpoints for managing notification preferences.
 It leverages AWS SNS pub/sub mechanism to send email notifications and Socket.IO to deliver real time in-app notifications.
 
 ## API DOCS
 
-<!-- [Swagger UI](https://tshirtshop-api.herokuapp.com/) -->
+[Swagger UI](https://mppdg-notification-service.herokuapp.com/api-docs)
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://www.getpostman.com/collections/07993574ca6f8b26069e)
 
@@ -94,7 +94,7 @@ Follow the steps below to setup a local development environment, make sure to ha
 
 ##### Reponse example
 
-`200 OK`
+`201 CREATED`
 
 ```source-json
 {
@@ -136,7 +136,7 @@ Follow the steps below to setup a local development environment, make sure to ha
 
 ##### Reponse example
 
-200 OK
+`200 OK`
 
 ```source-json
 {
@@ -152,7 +152,7 @@ Follow the steps below to setup a local development environment, make sure to ha
 }
 ```
 
-400 BAD REQUEST
+`400 BAD REQUEST`
 
 ```source-json
 {
@@ -175,7 +175,7 @@ Follow the steps below to setup a local development environment, make sure to ha
 
 ##### Reponse example
 
-200 OK
+`200 OK`
 
 ```source-json
 {
@@ -216,7 +216,7 @@ Follow the steps below to setup a local development environment, make sure to ha
 
 ##### Reponse example
 
-200 OK
+`201 CREATED`
 
 ```source-json
 {
@@ -225,7 +225,7 @@ Follow the steps below to setup a local development environment, make sure to ha
 }
 ```
 
-404 NOT FOUND
+`404 NOT FOUND`
 
 ```source-json
 {
@@ -250,7 +250,7 @@ Follow the steps below to setup a local development environment, make sure to ha
 
 ##### Reponse example
 
-200 OK
+`201 CREATED`
 
 ```source-json
 {
@@ -273,7 +273,7 @@ Follow the steps below to setup a local development environment, make sure to ha
 
 ##### Reponse example
 
-200 OK
+`200 OK`
 
 ```source-json
 {
@@ -303,7 +303,7 @@ Follow the steps below to setup a local development environment, make sure to ha
 
 ##### Reponse example
 
-200 OK
+`200 OK`
 
 ```source-json
 {
@@ -336,7 +336,7 @@ Follow the steps below to setup a local development environment, make sure to ha
 
 ##### Reponse example
 
-201 CREATED
+`201 CREATED`
 
 ```source-json
 {
@@ -348,7 +348,7 @@ Follow the steps below to setup a local development environment, make sure to ha
 }
 ```
 
-409 CONFLICT
+`409 CONFLICT`
 
 ```source-json
 {
@@ -373,7 +373,7 @@ Follow the steps below to setup a local development environment, make sure to ha
 
 ##### Reponse example
 
-200 OK
+`200 OK`
 
 ```source-json
 {
@@ -383,7 +383,7 @@ Follow the steps below to setup a local development environment, make sure to ha
 }
 ```
 
-404 NOT FOUND
+`404 NOT FOUND`
 
 ```source-json
 {
@@ -394,7 +394,7 @@ Follow the steps below to setup a local development environment, make sure to ha
 }
 ```
 
-404 NOT FOUND
+`404 NOT FOUND`
 
 ```source-json
 {
